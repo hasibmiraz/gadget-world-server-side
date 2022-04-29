@@ -25,7 +25,7 @@ app.get('/', async (req, res) => {
   try {
     const data = await Product.find({});
     res.status(200).json({
-      result: data[0],
+      result: data,
       message: 'Success',
     });
   } catch (error) {
