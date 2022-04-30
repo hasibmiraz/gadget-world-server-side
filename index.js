@@ -23,7 +23,7 @@ mongoose
 // get route
 app.get('/', async (req, res) => {
   try {
-    const data = await Product.find({});
+    const data = await Product.find({}).limit(5);
     res.status(200).json({
       result: data,
       message: 'Success',
@@ -33,6 +33,22 @@ app.get('/', async (req, res) => {
       error: 'There was a server side error',
     });
   }
+});
+
+// Get for home page
+app.get('/homePageProducts', (req, res) => {
+  Product.find()
+    .limit(5)
+    .exec((err, data) => {
+      err
+        ? res.status(500).json({
+            error: 'There was a server side error',
+          })
+        : res.status(200).json({
+            result: data,
+            message: 'Success',
+          });
+    });
 });
 
 // Create a product
