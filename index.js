@@ -35,10 +35,10 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Get for home page
+// Get products for home page
 app.get('/homePageProducts', (req, res) => {
   Product.find()
-    .limit(5)
+    .limit(6)
     .exec((err, data) => {
       err
         ? res.status(500).json({
