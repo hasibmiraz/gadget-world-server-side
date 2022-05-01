@@ -26,6 +26,11 @@ const productSchema = mongoose.Schema({
     required: true,
   },
 
+  sold: {
+    type: Number,
+    required: true,
+  },
+
   supplierName: {
     type: String,
     required: true,
