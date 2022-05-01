@@ -67,7 +67,7 @@ app.get('/:id', async (req, res) => {
 });
 
 // Update delivered quantity
-app.put('/:id', async (req, res) => {
+app.put('/update-delivered/:id', async (req, res) => {
   try {
     const result = await Product.findByIdAndUpdate(
       {
