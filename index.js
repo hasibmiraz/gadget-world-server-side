@@ -51,6 +51,21 @@ app.get('/homePageProducts', (req, res) => {
     });
 });
 
+// Get Single product
+app.get('/:id', async (req, res) => {
+  try {
+    const data = await Product.find({ _id: req.params.id });
+    res.status(200).json({
+      product: data[0],
+      message: 'Success',
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
 // Create a product
 app.post('/', async (req, res) => {
   const newProduct = new Product({ ...req.body });
