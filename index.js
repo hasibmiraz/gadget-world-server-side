@@ -66,6 +66,34 @@ app.get('/:id', async (req, res) => {
   }
 });
 
+// Update delivered quantity
+app.put('/:id', async (req, res) => {
+  try {
+    // const [{ quantity, sold }] = await Product.find({ _id: req.params.id });
+    const result = await Product.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          quantity: quantity,
+          sold: sold,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      result,
+      message: 'Todo was updated successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
 // Create a product
 app.post('/', async (req, res) => {
   const newProduct = new Product({ ...req.body });
