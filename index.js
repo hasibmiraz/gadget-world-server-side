@@ -69,15 +69,14 @@ app.get('/:id', async (req, res) => {
 // Update delivered quantity
 app.put('/:id', async (req, res) => {
   try {
-    // const [{ quantity, sold }] = await Product.find({ _id: req.params.id });
     const result = await Product.findByIdAndUpdate(
       {
         _id: req.params.id,
       },
       {
         $set: {
-          quantity: quantity,
-          sold: sold,
+          quantity: req.body.quantity,
+          sold: req.body.sold,
         },
       },
       { new: true }
@@ -88,6 +87,7 @@ app.put('/:id', async (req, res) => {
       message: 'Todo was updated successfully',
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: 'There was a server side error',
     });
