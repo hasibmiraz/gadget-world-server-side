@@ -84,7 +84,34 @@ app.put('/update-delivered/:id', async (req, res) => {
 
     res.status(200).json({
       result,
-      message: 'Todo was updated successfully',
+      message: 'Product was updated successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
+//
+app.put('/update-stock/:id', async (req, res) => {
+  try {
+    const result = await Product.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          quantity: req.body.quantity,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      result,
+      message: 'Product was updated successfully',
     });
   } catch (error) {
     console.log(error);
