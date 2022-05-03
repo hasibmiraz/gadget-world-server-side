@@ -35,6 +35,24 @@ app.get('/all-products', async (req, res) => {
   }
 });
 
+// Connect a product
+app.post('/', async (req, res) => {
+  const newProduct = new Product({
+    ...req.body,
+  });
+  try {
+    await newProduct.save();
+
+    res.status(200).json({
+      message: 'Product was inserted successfully',
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
 // get route
 app.get('/', async (req, res) => {
   try {
