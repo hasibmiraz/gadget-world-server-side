@@ -21,6 +21,21 @@ mongoose
   .catch((err) => console.log(err));
 
 // get route
+app.get('/all-products', async (req, res) => {
+  try {
+    const data = await Product.find({}).sort({ name: 'asc' });
+    res.status(200).json({
+      result: data,
+      message: 'Success',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
+// get route
 app.get('/', async (req, res) => {
   try {
     const data = await Product.find({}).limit(5);
@@ -94,7 +109,7 @@ app.put('/update-delivered/:id', async (req, res) => {
   }
 });
 
-//
+// Update stock
 app.put('/update-stock/:id', async (req, res) => {
   try {
     const result = await Product.findByIdAndUpdate(
@@ -121,6 +136,39 @@ app.put('/update-stock/:id', async (req, res) => {
   }
 });
 
+// Update product
+app.put('/update-product/:id', async (req, res) => {
+  const { name, description, img, price, sold } = req.body;
+  try {
+    const result = await Product.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          quantity: req.body.quantity,
+          name,
+          description,
+          img,
+          price,
+          sold,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      result,
+      message: 'Product was updated successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
 // Create a product
 app.post('/', async (req, res) => {
   const newProduct = new Product({ ...req.body });
@@ -128,9 +176,24 @@ app.post('/', async (req, res) => {
     const product = await newProduct.save();
     res.status(200).json({
       result: product,
-      message: 'Todo was inserted successfully',
+      message: 'Product was inserted successfully',
     });
   } catch (err) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
+// delete todo
+app.delete('/delete-product/:id', async (req, res) => {
+  try {
+    const data = await Product.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      result: data,
+      message: 'Product was deleted successfully',
+    });
+  } catch (error) {
     res.status(500).json({
       error: 'There was a server side error',
     });
