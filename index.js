@@ -60,6 +60,21 @@ app.get('/all-products', async (req, res) => {
   }
 });
 
+// Best selling
+app.get('/best-selling', async (req, res) => {
+  try {
+    const data = await Product.find({}).sort({ price: 'desc' }).limit(3);
+    res.status(200).json({
+      result: data,
+      message: 'Success',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
 // Get users items
 app.get('/products', verifyUser, async (req, res) => {
   try {
@@ -97,21 +112,6 @@ app.post('/', async (req, res) => {
       message: 'Product was inserted successfully',
     });
   } catch (err) {
-    res.status(500).json({
-      error: 'There was a server side error',
-    });
-  }
-});
-
-// get route
-app.get('/', async (req, res) => {
-  try {
-    const data = await Product.find({}).limit(5);
-    res.status(200).json({
-      result: data,
-      message: 'Success',
-    });
-  } catch (error) {
     res.status(500).json({
       error: 'There was a server side error',
     });
