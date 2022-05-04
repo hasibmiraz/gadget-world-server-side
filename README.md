@@ -2,6 +2,8 @@
 
 ### [Visit Live site](https://gadget-world-c3870.web.app/)
 
+> Please create your own database in mongodb to run the project locally
+
 Please run the following commands to run the website locally
 
 ```
@@ -9,7 +11,7 @@ Please run the following commands to run the website locally
 $ npm install
 
 # start the development server
-$ npm start
+$ npm run start-dev
 ```
 
 ---
