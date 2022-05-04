@@ -21,6 +21,21 @@ mongoose
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log(err));
 
+const verifyUser = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Unauthorized access' });
+  }
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: 'Forbidden request' });
+    }
+    req.decoded = decoded;
+    next();
+  });
+};
+
 // Get jwt
 app.post('/get-token', async (req, res) => {
   const user = req.body;
@@ -46,16 +61,24 @@ app.get('/all-products', async (req, res) => {
 });
 
 // Get users items
-app.get('/products', async (req, res) => {
+app.get('/products', verifyUser, async (req, res) => {
   try {
-    const data = await Product.find({ supplierEmail: req.query.email }).sort({
-      name: 'asc',
-    });
-    res.status(200).json({
-      result: data,
-      message: 'Success',
-    });
+    const decodedEmail = req.decoded.email;
+    const email = req.query.email;
+    console.log(email, decodedEmail);
+    if (email === decodedEmail) {
+      const data = await Product.find({ supplierEmail: email }).sort({
+        name: 'asc',
+      });
+      res.status(200).json({
+        result: data,
+        message: 'Success',
+      });
+    } else {
+      res.status(403).json({ message: 'forbidden access' });
+    }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: 'There was a server side error',
     });
