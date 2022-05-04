@@ -63,7 +63,7 @@ app.get('/all-products', async (req, res) => {
 // Best selling
 app.get('/best-selling', async (req, res) => {
   try {
-    const data = await Product.find({}).sort({ price: 'desc' }).limit(4);
+    const data = await Product.find({}).sort({ sold: 'desc' }).limit(4);
     res.status(200).json({
       result: data,
       message: 'Success',
