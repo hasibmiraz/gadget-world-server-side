@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import Product from './schemas/productSchema.js';
+import jwt from 'jsonwebtoken';
 
 // Variable calls
 const app = express();
@@ -19,6 +20,15 @@ mongoose
   .connect(databaseUri)
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log(err));
+
+// Get jwt
+app.post('/get-token', async (req, res) => {
+  const user = req.body;
+  const accessToken = jwt.sign(user, process.env.SECRET_KEY, {
+    expiresIn: '1d',
+  });
+  res.send({ accessToken });
+});
 
 // get route
 app.get('/all-products', async (req, res) => {
