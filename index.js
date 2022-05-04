@@ -35,7 +35,24 @@ app.get('/all-products', async (req, res) => {
   }
 });
 
-// Connect a product
+// Get users items
+app.get('/products', async (req, res) => {
+  try {
+    const data = await Product.find({ supplierEmail: req.query.email }).sort({
+      name: 'asc',
+    });
+    res.status(200).json({
+      result: data,
+      message: 'Success',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'There was a server side error',
+    });
+  }
+});
+
+// Post a product
 app.post('/', async (req, res) => {
   const newProduct = new Product({
     ...req.body,
